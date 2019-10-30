@@ -4,6 +4,7 @@
 #include "Field.h"
 #include <random>
 #include <algorithm>
+#include <time.h>
 
 std::list<int> LayoutGenerator::bombsPositions;
 
@@ -11,8 +12,7 @@ void LayoutGenerator::generateBombsPositions(){
 
     int rowsAndColumns = (int)qPow(NUM_OF_ROWS_AND_COL, 2);
 
-    std::random_device rd;
-    std::mt19937 eng(rd());
+    std::mt19937 eng(time(nullptr));
     std::uniform_int_distribution<> distr(0, rowsAndColumns-1);
 
     for(int i = 0; i < BOMBS; i++){
