@@ -3,6 +3,9 @@
 #include <QApplication>
 #include <QGridLayout>
 #include <QPushButton>
+#include "LayoutGenerator.h"
+
+#define NUM_OF_ROWS_AND_COL 8
 
 int main(int argc, char *argv[])
 {
@@ -10,29 +13,10 @@ int main(int argc, char *argv[])
     MainWindow window;
 
     QWidget *widget = new QWidget(&window);
-    QGridLayout *layout = new QGridLayout(widget);
-    layout->setHorizontalSpacing(2);
-    layout->setVerticalSpacing(2);
+    QGridLayout* layout = LayoutGenerator::generate(widget, NUM_OF_ROWS_AND_COL);
 
     window.setCentralWidget(widget);
     widget->setLayout(layout);
-
-    int currentRow = 0;
-    int currentColumn = 0;
-    for(int i = 0; i < 64; i++){
-
-        QPushButton* button = new QPushButton();
-        button->setMaximumWidth(30);
-        button->setMaximumHeight(30);
-
-        layout->addWidget(button, currentRow, currentColumn);
-        currentColumn++;
-        if(currentColumn >= 8){
-            currentRow++;
-            currentColumn = 0;
-        }
-    }
-
 
     window.show();
     return a.exec();
