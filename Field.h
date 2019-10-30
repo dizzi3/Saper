@@ -13,6 +13,9 @@ public:
     FieldStatus getStatus();
     void setStatus(FieldStatus status);
 
+public slots:
+    void onClickSlot();
+
 };
 
 #endif // FIELD_H
