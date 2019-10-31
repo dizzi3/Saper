@@ -25,3 +25,14 @@ void Field::onClickSlot(){
     }
 
 }
+
+Field* Field::getStyledField(){
+    Field* field = new Field();
+
+    QObject::connect(field, &Field::clicked, field, &Field::onClickSlot);
+
+    field->setMaximumWidth(30);
+    field->setMaximumHeight(30);
+
+    return field;
+}

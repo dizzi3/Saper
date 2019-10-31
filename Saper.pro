@@ -16,15 +16,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Coordinate.cpp \
     Field.cpp \
     LayoutGenerator.cpp \
+    StyledGridLayout.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    Coordinate.h \
     Field.h \
     FieldStatus.h \
     LayoutGenerator.h \
+    StyledGridLayout.h \
     mainwindow.h
 
 FORMS += \

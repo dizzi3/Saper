@@ -13,6 +13,8 @@ public:
     FieldStatus getStatus();
     void setStatus(FieldStatus status);
 
+    static Field* getStyledField();
+
 public slots:
     void onClickSlot();
 

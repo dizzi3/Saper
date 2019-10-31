@@ -1,70 +1,87 @@
 #include "LayoutGenerator.h"
 
 #include <QtMath>
-#include "Field.h"
 #include <random>
 #include <algorithm>
 #include <time.h>
+#include <QDebug>
 
-std::list<int> LayoutGenerator::bombsPositions;
+LayoutGenerator* LayoutGenerator::instance;
 
-void LayoutGenerator::generateBombsPositions(){
+LayoutGenerator::LayoutGenerator(){
+    numberOfAllFields = (int)qPow(NUM_OF_ROWS_AND_COL, 2);
+}
 
-    int rowsAndColumns = (int)qPow(NUM_OF_ROWS_AND_COL, 2);
-
-    std::mt19937 eng(time(nullptr));
-    std::uniform_int_distribution<> distr(0, rowsAndColumns-1);
-
-    for(int i = 0; i < BOMBS; i++){
-        int rand = distr(eng);
-
-        //while list already contains this random element
-        while(bombListContains(rand))
-            rand = distr(eng);
-
-       LayoutGenerator::bombsPositions.push_back(rand);
+void LayoutGenerator::freeInstanceMemory(){
+    if(instance != nullptr){
+        delete instance;
+        instance = nullptr;
     }
 }
 
-QGridLayout* LayoutGenerator::generate(QWidget* widget){
+Coordinate generateRandomCoordinate();
 
-    LayoutGenerator::bombsPositions = std::list<int>();
+void LayoutGenerator::generateBombsCoordinates(){
 
-    generateBombsPositions();
+    for(int i = 0; i < BOMBS; i++){
+        Coordinate coordinate = generateRandomCoordinate();
 
-    QGridLayout *layout = new QGridLayout(widget);
-    layout->setHorizontalSpacing(2);
-    layout->setVerticalSpacing(2);
+        while(doesBombListContain(coordinate))
+            coordinate = generateRandomCoordinate();
 
-    int currentRow = 0;
-    int currentColumn = 0;
-    int rowsAndColumns = (int)qPow(NUM_OF_ROWS_AND_COL, 2);
-    for(int i = 0; i < rowsAndColumns; i++){
-
-        Field* field = new Field();
-        field->setMaximumWidth(30);
-        field->setMaximumHeight(30);
-
-        if(bombListContains(i)){
-            field->setStatus(FieldStatus::BOMB);
-            field->setIcon(QIcon(":/icons/bomb_icon.png"));
-        }
-        else
-            field->setStatus(FieldStatus::EMPTY);
-
-        QObject::connect(field, &QPushButton::clicked, field, &Field::onClickSlot);
-
-        layout->addWidget(field, currentRow, currentColumn);
-        currentColumn++;
-        if(currentColumn >= NUM_OF_ROWS_AND_COL){
-            currentRow++;
-            currentColumn = 0;
-        }
+       instance->bombsCoordinates.push_back(coordinate);
     }
+}
+
+Coordinate LayoutGenerator::generateRandomCoordinate(){
+
+    std::mt19937 eng((unsigned int)time(nullptr));
+    std::uniform_int_distribution<> distr(0, numberOfAllFields - 1);
+
+    int randomFieldIndex = distr(eng);
+
+    return Coordinate::getCoordinateBasedOnIndex(randomFieldIndex);
+}
+
+StyledGridLayout* LayoutGenerator::generate(QWidget* widget){
+
+    LayoutGenerator();
+
+    if(instance == nullptr)
+        instance = new LayoutGenerator();
+
+    instance->generateBombsCoordinates();
+
+    StyledGridLayout* layout = StyledGridLayout::instance(widget);
+
+    for(int i = 0; i < instance->numberOfAllFields; i++){
+        Coordinate coordinates = Coordinate::getCoordinateBasedOnIndex(i);
+
+        Field* field = Field::getStyledField();
+
+        instance->setBombStatusIfFieldIsOnTheList(field, coordinates);
+
+        layout->addWidget(field, coordinates.getRow(), coordinates.getColumn());
+    }
+
+    instance->freeInstanceMemory();
 
     return layout;
 }
 
-bool LayoutGenerator::bombListContains(int element){
-    return (std::find(LayoutGenerator::bombsPositions.begin(), LayoutGenerator::bombsPositions.end(), element) != LayoutGenerator::bombsPositions.end());
+void LayoutGenerator::setBombStatusIfFieldIsOnTheList(Field* field, Coordinate coordinates){
+
+    if(instance->doesBombListContain(coordinates)){
+        field->setStatus(FieldStatus::BOMB);
+
+        //TODO: MOVE TO ON CLICK WHEN FIELD IS A BOMB
+        field->setIcon(QIcon(":/icons/bomb_icon.png"));
+    }
+    else
+        field->setStatus(FieldStatus::EMPTY);
+
+}
+
+bool LayoutGenerator::doesBombListContain(Coordinate element){
+    return (std::find(LayoutGenerator::bombsCoordinates.begin(), LayoutGenerator::bombsCoordinates.end(), element) != LayoutGenerator::bombsCoordinates.end());
 }
