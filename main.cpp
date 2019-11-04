@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     MainWindow window;
 
     QWidget *widget = new QWidget(&window);
-    QGridLayout* layout = LayoutGenerator::generate(widget);
+    StyledGridLayout* layout = LayoutGenerator::generate(widget);
 
     window.setCentralWidget(widget);
     widget->setLayout(layout);

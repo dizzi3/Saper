@@ -3,12 +3,12 @@
 
 Coordinate::Coordinate(int row, int col) : QPoint(row, col){}
 
-Coordinate Coordinate::getCoordinateBasedOnIndex(int index){
+Coordinate* Coordinate::getCoordinateBasedOnIndex(int index){
 
     int row = (int)(index/ NUM_OF_ROWS_AND_COL);
     int column = (int)(index % NUM_OF_ROWS_AND_COL);
 
-    return Coordinate(row, column);
+    return new Coordinate(row, column);
 }
 
 int Coordinate::getRow(){

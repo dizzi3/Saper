@@ -6,28 +6,22 @@
 #include "StyledGridLayout.h"
 #include "Coordinate.h"
 #include "Field.h"
-
-#define NUM_OF_ROWS_AND_COL 8
-#define BOMBS 10
+#include "Board.h"
 
 class LayoutGenerator{
 
 private:
     LayoutGenerator();
-    void freeInstanceMemory();
-    static LayoutGenerator* instance;
 
-    std::list<Coordinate> bombsCoordinates;
-    Coordinate generateRandomCoordinate();
-    void generateBombsCoordinates();
-    void setBombStatusIfFieldIsOnTheList(Field* field, Coordinate coordinates);
-    bool doesBombListContain(Coordinate element);
+    void freeInstanceMemory();
+    void addFieldsToTheLayout(StyledGridLayout* layout);
 
 public:
     static StyledGridLayout* generate(QWidget* widget);
 
 private:
-    int numberOfAllFields;
+    static LayoutGenerator* instance;
+    Board* board;
 };
 
 #endif // LAYOUTGENERATOR_H

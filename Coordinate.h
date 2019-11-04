@@ -8,7 +8,7 @@ class Coordinate : public QPoint{
 public:
     Coordinate(int row, int col);
 
-    static Coordinate getCoordinateBasedOnIndex(int index);
+    static Coordinate* getCoordinateBasedOnIndex(int index);
 
     int getRow();
     int getColumn();
