@@ -28,6 +28,10 @@ public:
     int getValue() const;
 
     static Field* getStyledField();
+    void updateTextBasedOnValue();
+
+private:
+    QString getTextColorBasedOnValue();
 
 private slots:
     void onClickSlot();
