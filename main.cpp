@@ -4,6 +4,8 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include "LayoutGenerator.h"
+#include <QFontDatabase>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {

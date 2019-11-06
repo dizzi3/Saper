@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle("Saper");
-    setFixedSize(350,350);
+    setFixedSize(400,400);
 }
 
 MainWindow::~MainWindow()

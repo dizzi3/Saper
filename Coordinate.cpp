@@ -11,6 +11,13 @@ Coordinate* Coordinate::getCoordinateBasedOnIndex(int index){
     return new Coordinate(row, column);
 }
 
+bool Coordinate::operator == (Coordinate const obj){
+    if(obj.x() == this->x() && obj.y() == this->y())
+        return true;
+
+    return false;
+}
+
 int Coordinate::getRow(){
     return this->x();
 }

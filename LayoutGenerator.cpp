@@ -36,7 +36,7 @@ StyledGridLayout* LayoutGenerator::generate(QWidget* widget){
     StyledGridLayout* layout = StyledGridLayout::instance(widget);
     instance->addFieldsToTheLayout(layout);
 
-    instance->freeInstanceMemory();
+    //instance->freeInstanceMemory();
 
     return layout;
 }

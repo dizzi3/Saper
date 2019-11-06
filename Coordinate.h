@@ -10,6 +10,8 @@ public:
 
     static Coordinate* getCoordinateBasedOnIndex(int index);
 
+    bool operator == (Coordinate const obj);
+
     int getRow();
     int getColumn();
 

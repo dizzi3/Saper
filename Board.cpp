@@ -1,5 +1,6 @@
 #include "Board.h"
 #include <QtMath>
+#include "Field.h"
 
 Board::Board(){
     numberOfAllFields = (int)qPow(NUM_OF_ROWS_AND_COL, 2);
@@ -7,6 +8,59 @@ Board::Board(){
 
 std::list<Field*> Board::getFields(){
     return this->fields;
+}
+
+void Board::uncoverAllEmptyFieldsAround(Coordinate *coordinate){
+
+    int column = coordinate->getColumn();
+    int row = coordinate->getRow();
+
+    if(column - 1 >= 0){
+        uncoverIfExists(row, column - 1);
+
+        if(row - 1 >= 0)
+            uncoverIfExists(row - 1, column - 1);
+
+        if(row + 1 < NUM_OF_ROWS_AND_COL)
+            uncoverIfExists(row + 1, column - 1);
+    }
+
+    if(column + 1 < NUM_OF_ROWS_AND_COL){
+        uncoverIfExists(row, column + 1);
+
+        if(row - 1 >= 0)
+            uncoverIfExists(row - 1, column + 1);
+
+        if(row + 1 < NUM_OF_ROWS_AND_COL)
+            uncoverIfExists(row + 1, column + 1);
+    }
+
+    if(row - 1 >= 0)
+        uncoverIfExists(row - 1, column);
+
+    if(row + 1 < NUM_OF_ROWS_AND_COL)
+        uncoverIfExists(row + 1, column);
+
+
+}
+
+void Board::uncoverIfExists(int row, int column){
+    Field* field = getFieldIfExists(Coordinate(row, column));
+
+    if(field == nullptr)
+        return;
+
+    if(field->getCovered() == false)
+        return;
+
+    if(field->getStatus() == FieldStatus::BOMB)
+        return;
+
+    field->setCovered(false);
+    field->click();
+
+    if(field->getStatus() == FieldStatus::EMPTY)
+        uncoverAllEmptyFieldsAround(field->getCoordinates());
 }
 
 void Board::generateBoard(){
@@ -42,7 +96,7 @@ void Board::generateFields(){
     for(int i = 0; i < numberOfAllFields; i++){
         Coordinate* coordinates = Coordinate::getCoordinateBasedOnIndex(i);
 
-        Field* field = Field::getStyledField();
+        Field* field = Field::getStyledField(this);
         field->setCoordinates(coordinates);
 
         if(doesBombListContain(*coordinates))
@@ -59,21 +113,13 @@ bool Board::doesBombListContain(Coordinate element){
 }
 
 void Board::setBombStatus(Field* field){
-
     field->setStatus(FieldStatus::BOMB);
-
-    //TODO: MOVE TO ON CLICK WHEN FIELD IS A BOMB
-    field->setIcon(QIcon(":/icons/bomb_icon.png"));
 }
 
 void Board::setNonBombFieldsValues(){
 
     for(std::list<Coordinate>::iterator it = bombsCoordinates.begin(); it != bombsCoordinates.end(); ++it)
         updateBombSurroundingFieldsValues(&(*it));
-
-    for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it)
-        (*it)->updateTextBasedOnValue();
-
 }
 
 void Board::updateBombSurroundingFieldsValues(Coordinate* bombCoordinate){
@@ -111,14 +157,19 @@ void Board::updateBombSurroundingFieldsValues(Coordinate* bombCoordinate){
 void Board::increaseFieldValueIfExists(int row, int column){
     Field* field = getFieldIfExists(Coordinate(row, column));
     if(field != nullptr){
-        if(field->getStatus() != FieldStatus::BOMB)
+        if(field->getStatus() != FieldStatus::BOMB){
             field->setValue(field->getValue() + 1);
+            field->setStatus(FieldStatus::NUMBER);
+        }
     }
 }
 
 Field* Board::getFieldIfExists(Coordinate c){
+
     for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it){
-        if((*(*it)->getCoordinates()) == c)
+        Coordinate a = *((*it)->getCoordinates());
+
+        if(a == c)
             return (*it);
     }
 

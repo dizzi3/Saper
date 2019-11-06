@@ -7,9 +7,14 @@ Field::Field(const Field& field){
     this->status = field.getStatus();
     this->coordinates = field.getCoordinates();
     this->value = field.getValue();
+    this->board = field.board;
+    this->covered = field.covered;
 }
 
-Field::Field() : coordinates(nullptr){}
+Field::Field(Board* board) : coordinates(nullptr){
+    this->board = board;
+    covered = true;
+}
 
 void Field::setStatus(FieldStatus status){
     this->status = status;
@@ -17,6 +22,14 @@ void Field::setStatus(FieldStatus status){
 
 FieldStatus Field::getStatus() const{
     return this->status;
+}
+
+void Field::setCovered(bool c){
+    covered = c;
+}
+
+bool Field::getCovered(){
+    return this->covered;
 }
 
 void Field::setCoordinates(Coordinate* c){
@@ -35,15 +48,17 @@ int Field::getValue() const{
     return this->value;
 }
 
-Field* Field::getStyledField(){
-    Field* field = new Field();
+Field* Field::getStyledField(Board* board){
+    Field* field = new Field(board);
 
-    QObject::connect(field, &Field::clicked, field, &Field::onClickSlot);
+    connect(field, &Field::clicked, field, &Field::onClickSlot);
 
     field->setMaximumWidth(30);
     field->setMaximumHeight(30);
     field->setStatus(FieldStatus::EMPTY);
     field->setValue(0);
+
+    field->setCheckable(true);
 
     return field;
 }
@@ -64,7 +79,7 @@ void Field::updateTextBasedOnValue(){
 }
 
 QString Field::getTextColorBasedOnValue(){
-    QString stylesheet = "font-weight: bold;";
+    QString stylesheet = getBasicStylesheet() + "font-weight: bold;";
 
     if(NUM_OF_ROWS_AND_COL < 10)
         stylesheet.append("font-size: 15px;");
@@ -94,18 +109,20 @@ QString Field::getTextColorBasedOnValue(){
 
 }
 
+QString Field::getBasicStylesheet(){
+    return "background-color: #c2eaff; border: 1.2px solid #000;";
+}
+
 void Field::onClickSlot(){
 
-    if(getStatus() == FieldStatus::BOMB){
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Title");
-        msgBox.setText("You Clicked a bomb");
-        msgBox.exec();
-    }else{
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Title");
-        msgBox.setText("NOT A BOMB");
-        msgBox.exec();
+    if(status == FieldStatus::EMPTY){
+        setStyleSheet(getBasicStylesheet());
+        board->uncoverAllEmptyFieldsAround(coordinates);
+    }else if(status == FieldStatus::NUMBER)
+        updateTextBasedOnValue();
+    else{
+        setIcon(QIcon(":/icons/bomb_icon.png"));
+        setStyleSheet("background-color: #ff1212; border: 1.2px solid #000");
     }
 
 }

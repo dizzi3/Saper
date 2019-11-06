@@ -3,10 +3,11 @@
 
 #include <list>
 #include "Coordinate.h"
-#include "Field.h"
 
-#define NUM_OF_ROWS_AND_COL 12
-#define BOMBS 40
+#define NUM_OF_ROWS_AND_COL 13
+#define BOMBS 22
+
+class Field;
 
 class Board{
 
@@ -14,9 +15,12 @@ public:
     Board();
 
     std::list<Field*> getFields();
+    void uncoverAllEmptyFieldsAround(Coordinate* coordinate);
+
     void generateBoard();
 
 private:
+    void uncoverIfExists(int row, int column);
     void generateBombsCoordinates();
     Coordinate* generateRandomCoordinate(std::mt19937* eng);
     void generateFields();
