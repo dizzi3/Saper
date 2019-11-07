@@ -5,7 +5,7 @@
 #include "Coordinate.h"
 
 #define NUM_OF_ROWS_AND_COL 13
-#define BOMBS 22
+#define BOMBS 25
 
 class Field;
 
@@ -16,6 +16,7 @@ public:
 
     std::list<Field*> getFields();
     void uncoverAllEmptyFieldsAround(Coordinate* coordinate);
+    void uncoverAllBombsExcept(Field* field);
 
     void generateBoard();
 

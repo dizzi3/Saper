@@ -63,6 +63,19 @@ void Board::uncoverIfExists(int row, int column){
         uncoverAllEmptyFieldsAround(field->getCoordinates());
 }
 
+void Board::uncoverAllBombsExcept(Field *field){
+
+    for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it){
+
+        if((*it) == field)
+            continue;
+
+        if((*it)->getStatus() == FieldStatus::BOMB)
+            (*it)->setIcon(QIcon(":/icons/bomb_icon.png"));
+    }
+
+}
+
 void Board::generateBoard(){
     generateBombsCoordinates();
     generateFields();

@@ -59,6 +59,7 @@ Field* Field::getStyledField(Board* board){
     field->setValue(0);
 
     field->setCheckable(true);
+    field->setCursor(Qt::PointingHandCursor);
 
     return field;
 }
@@ -123,6 +124,8 @@ void Field::onClickSlot(){
     else{
         setIcon(QIcon(":/icons/bomb_icon.png"));
         setStyleSheet("background-color: #ff1212; border: 1.2px solid #000");
+        board->uncoverAllBombsExcept(this);
     }
 
+    setCursor(Qt::ArrowCursor);
 }
