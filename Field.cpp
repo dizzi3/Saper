@@ -82,9 +82,9 @@ void Field::updateTextBasedOnValue(){
 QString Field::getTextColorBasedOnValue(){
     QString stylesheet = getBasicStylesheet() + "font-weight: bold;";
 
-    if(NUM_OF_ROWS_AND_COL < 10)
+    if(Board::NUM_OF_ROWS_AND_COL < 10)
         stylesheet.append("font-size: 15px;");
-    else if(NUM_OF_ROWS_AND_COL >= 10 && NUM_OF_ROWS_AND_COL < 15)
+    else if(Board::NUM_OF_ROWS_AND_COL >= 10 && Board::NUM_OF_ROWS_AND_COL < 15)
         stylesheet.append("font-size: 14px;");
     else
         stylesheet.append("font-size: 9.5px;");

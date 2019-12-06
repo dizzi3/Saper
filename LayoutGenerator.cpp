@@ -30,10 +30,11 @@ StyledGridLayout* LayoutGenerator::generate(QWidget* widget){
     if(instance == nullptr)
         instance = new LayoutGenerator();
 
+    StyledGridLayout* layout = StyledGridLayout::instance(widget);
+
     instance->board = new Board();
     instance->board->generateBoard();
 
-    StyledGridLayout* layout = StyledGridLayout::instance(widget);
     instance->addFieldsToTheLayout(layout);
 
     //instance->freeInstanceMemory();

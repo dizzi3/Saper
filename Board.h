@@ -3,15 +3,16 @@
 
 #include <list>
 #include "Coordinate.h"
-
-#define NUM_OF_ROWS_AND_COL 13
-#define BOMBS 25
+#include "StyledGridLayout.h"
 
 class Field;
 
 class Board{
 
 public:
+    static const int NUM_OF_ROWS_AND_COL = 14;
+    static const int BOMBS = 25;
+
     Board();
 
     std::list<Field*> getFields();
@@ -35,6 +36,7 @@ private:
     std::list<Coordinate> bombsCoordinates;
     std::list<Field*> fields;
     int numberOfAllFields;
+    StyledGridLayout* gridLayout;
 };
 
 #endif // BOARD_H

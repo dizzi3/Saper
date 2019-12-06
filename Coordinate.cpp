@@ -5,8 +5,8 @@ Coordinate::Coordinate(int row, int col) : QPoint(row, col){}
 
 Coordinate* Coordinate::getCoordinateBasedOnIndex(int index){
 
-    int row = (int)(index/ NUM_OF_ROWS_AND_COL);
-    int column = (int)(index % NUM_OF_ROWS_AND_COL);
+    int row = (int)(index/ Board::NUM_OF_ROWS_AND_COL);
+    int column = (int)(index % Board::NUM_OF_ROWS_AND_COL);
 
     return new Coordinate(row, column);
 }
