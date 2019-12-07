@@ -79,6 +79,19 @@ void Field::updateTextBasedOnValue(){
     setStyleSheet(getTextColorBasedOnValue());
 }
 
+void Field::setBombIcon(){
+    QIcon icon;
+    icon.addPixmap(QPixmap(":/icons/bomb_icon.png"), QIcon::Normal);
+    icon.addPixmap(QPixmap(":/icons/bomb_icon.png"), QIcon::Disabled);
+
+    setIcon(icon);
+}
+
+void Field::setDisabledStylesheet(){
+    QString stylesheet = "background-color: #576490; border: 1.2px solid #000;";
+    setStyleSheet(stylesheet);
+}
+
 QString Field::getTextColorBasedOnValue(){
     QString stylesheet = getBasicStylesheet() + "font-weight: bold;";
 
@@ -122,10 +135,13 @@ void Field::onClickSlot(){
     }else if(status == FieldStatus::NUMBER)
         updateTextBasedOnValue();
     else{
-        setIcon(QIcon(":/icons/bomb_icon.png"));
-        setStyleSheet("background-color: #ff1212; border: 1.2px solid #000");
+        board->disableAllButtons();
+        setBombIcon();
+        setStyleSheet(":disabled{background-color: #ff1212; border: 1.2px solid #000}");
         board->uncoverAllBombsExcept(this);
+
     }
 
+    covered = false;
     setCursor(Qt::ArrowCursor);
 }

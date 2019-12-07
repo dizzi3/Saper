@@ -10,14 +10,15 @@ class Field;
 class Board{
 
 public:
-    static const int NUM_OF_ROWS_AND_COL = 14;
-    static const int BOMBS = 25;
+    static const int NUM_OF_ROWS_AND_COL = 30;
+    static const int BOMBS = 100;
 
     Board();
 
     std::list<Field*> getFields();
     void uncoverAllEmptyFieldsAround(Coordinate* coordinate);
     void uncoverAllBombsExcept(Field* field);
+    void disableAllButtons();
 
     void generateBoard();
 

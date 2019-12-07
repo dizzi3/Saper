@@ -37,6 +37,9 @@ public:
     static Field* getStyledField(Board* board);
     void updateTextBasedOnValue();
 
+    void setBombIcon();
+    void setDisabledStylesheet();
+
 private:
     QString getTextColorBasedOnValue();
     QString getBasicStylesheet();

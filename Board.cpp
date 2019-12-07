@@ -71,7 +71,19 @@ void Board::uncoverAllBombsExcept(Field *field){
             continue;
 
         if((*it)->getStatus() == FieldStatus::BOMB)
-            (*it)->setIcon(QIcon(":/icons/bomb_icon.png"));
+            (*it)->setBombIcon();
+    }
+
+}
+
+void Board::disableAllButtons(){
+
+    for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it){
+
+        if((*it)->getCovered())
+            (*it)->setDisabledStylesheet();
+
+        (*it)->setDisabled(true);
     }
 
 }
