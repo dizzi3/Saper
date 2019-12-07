@@ -19,6 +19,9 @@ public:
     void uncoverAllEmptyFieldsAround(Coordinate* coordinate);
     void uncoverAllBombsExcept(Field* field);
     void disableAllButtons();
+    void checkForWin();
+    bool areAllFlagsCorrect();
+    bool areOnlyBombsLeftUncovered();
 
     void generateBoard();
 

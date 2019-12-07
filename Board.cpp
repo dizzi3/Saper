@@ -1,6 +1,7 @@
 #include "Board.h"
 #include <QtMath>
 #include "Field.h"
+#include <QMessageBox>
 
 Board::Board(){
     numberOfAllFields = (int)qPow(NUM_OF_ROWS_AND_COL, 2);
@@ -91,6 +92,42 @@ void Board::disableAllButtons(){
         (*it)->setDisabled(true);
     }
 
+}
+
+void Board::checkForWin(){
+
+    if(areAllFlagsCorrect() || areOnlyBombsLeftUncovered()){
+
+        QMessageBox msgBox;
+        msgBox.setText("Gratulacje, wygrałeś!");
+        msgBox.exec();
+
+    }
+
+}
+
+bool Board::areAllFlagsCorrect(){
+
+    for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it){
+
+        if((*it)->getStatus() == FieldStatus::BOMB && (*it)->isFlagged() == false)
+            return false;
+
+    }
+
+    return true;
+}
+
+bool Board::areOnlyBombsLeftUncovered(){
+
+    for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it){
+
+        if((*it)->getCovered() == true && (*it)->getStatus() != FieldStatus::BOMB)
+            return false;
+
+    }
+
+    return true;
 }
 
 void Board::generateBoard(){

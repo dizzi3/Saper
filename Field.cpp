@@ -160,9 +160,11 @@ void Field::onLeftClickSlot(){
     if(status == FieldStatus::EMPTY){
         setStyleSheet(getBasicStylesheet());
         board->uncoverAllEmptyFieldsAround(coordinates);
-    }else if(status == FieldStatus::NUMBER)
+        board->checkForWin();
+    }else if(status == FieldStatus::NUMBER){
         updateTextBasedOnValue();
-    else{
+        board->checkForWin();
+    }else{
         board->disableAllButtons();
         setBombIcon();
         setStyleSheet(":disabled{background-color: #EB5160; border: 1.2px solid #000}");
@@ -182,6 +184,7 @@ void Field::onRightClickSlot(){
     else
         setDefaultStyle();
 
+    board->checkForWin();
 }
 
 void Field::mousePressEvent(QMouseEvent *e){
