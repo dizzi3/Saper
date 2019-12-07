@@ -9,11 +9,13 @@ Field::Field(const Field& field){
     this->value = field.getValue();
     this->board = field.board;
     this->covered = field.covered;
+    this->flagged = field.flagged;
 }
 
 Field::Field(Board* board) : coordinates(nullptr){
     this->board = board;
     covered = true;
+    flagged = false;
 }
 
 void Field::setStatus(FieldStatus status){
@@ -30,6 +32,10 @@ void Field::setCovered(bool c){
 
 bool Field::getCovered(){
     return this->covered;
+}
+
+bool Field::isFlagged(){
+    return this->flagged;
 }
 
 void Field::setCoordinates(Coordinate* c){
@@ -51,7 +57,8 @@ int Field::getValue() const{
 Field* Field::getStyledField(Board* board){
     Field* field = new Field(board);
 
-    connect(field, &Field::clicked, field, &Field::onClickSlot);
+    connect(field, &Field::leftMouseButtonClicked, field, &Field::onLeftClickSlot);
+    connect(field, &Field::rightMouseButtonClicked, field, &Field::onRightClickSlot);
 
     field->setMaximumWidth(30);
     field->setMaximumHeight(30);
@@ -92,6 +99,13 @@ void Field::setDisabledStylesheet(){
     setStyleSheet(stylesheet);
 }
 
+void Field::setDisabledFlagStylesheet(){
+    if(status == FieldStatus::BOMB)
+        setStyleSheet("background-color: #50C5B7; border: 1.2px solid #000;");
+    else
+        setStyleSheet("background-color: #EB5160; border: 1.2px solid #000;");
+}
+
 QString Field::getTextColorBasedOnValue(){
     QString stylesheet = getBasicStylesheet() + "font-weight: bold;";
 
@@ -127,7 +141,21 @@ QString Field::getBasicStylesheet(){
     return "background-color: #c2eaff; border: 1.2px solid #000;";
 }
 
-void Field::onClickSlot(){
+void Field::setFlaggedStyle(){
+    QIcon icon;
+    icon.addPixmap(QPixmap(":/icons/flag_icon.png"), QIcon::Normal);
+
+    setIcon(icon);
+}
+
+void Field::setDefaultStyle(){
+    setIcon(QIcon());
+}
+
+void Field::onLeftClickSlot(){
+
+    if(flagged)
+        return;
 
     if(status == FieldStatus::EMPTY){
         setStyleSheet(getBasicStylesheet());
@@ -137,11 +165,28 @@ void Field::onClickSlot(){
     else{
         board->disableAllButtons();
         setBombIcon();
-        setStyleSheet(":disabled{background-color: #ff1212; border: 1.2px solid #000}");
+        setStyleSheet(":disabled{background-color: #EB5160; border: 1.2px solid #000}");
         board->uncoverAllBombsExcept(this);
-
     }
 
     covered = false;
     setCursor(Qt::ArrowCursor);
+}
+
+void Field::onRightClickSlot(){
+
+    flagged = !flagged;
+
+    if(flagged)
+        setFlaggedStyle();
+    else
+        setDefaultStyle();
+
+}
+
+void Field::mousePressEvent(QMouseEvent *e){
+    if(e->button() == Qt::RightButton)
+        emit rightMouseButtonClicked();
+    else if(e->button() == Qt::LeftButton)
+        emit leftMouseButtonClicked();
 }

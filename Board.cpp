@@ -50,6 +50,9 @@ void Board::uncoverIfExists(int row, int column){
     if(field == nullptr)
         return;
 
+    if(field->isFlagged())
+        return;
+
     if(field->getCovered() == false)
         return;
 
@@ -57,7 +60,7 @@ void Board::uncoverIfExists(int row, int column){
         return;
 
     field->setCovered(false);
-    field->click();
+    field->onLeftClickSlot();
 
     if(field->getStatus() == FieldStatus::EMPTY)
         uncoverAllEmptyFieldsAround(field->getCoordinates());
@@ -70,7 +73,7 @@ void Board::uncoverAllBombsExcept(Field *field){
         if((*it) == field)
             continue;
 
-        if((*it)->getStatus() == FieldStatus::BOMB)
+        if((*it)->getStatus() == FieldStatus::BOMB && !(*it)->isFlagged())
             (*it)->setBombIcon();
     }
 
@@ -80,7 +83,9 @@ void Board::disableAllButtons(){
 
     for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it){
 
-        if((*it)->getCovered())
+        if((*it)->isFlagged())
+            (*it)->setDisabledFlagStylesheet();
+        else if((*it)->getCovered())
             (*it)->setDisabledStylesheet();
 
         (*it)->setDisabled(true);

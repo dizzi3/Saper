@@ -5,8 +5,11 @@
 #include "FieldStatus.h"
 #include "Coordinate.h"
 #include "Board.h"
+#include <QMouseEvent>
 
 class Field : public QPushButton{
+
+Q_OBJECT
 
 public:
     Field(Coordinate* c, Board* board) : coordinates(c){this->board = board; covered = true;}
@@ -18,6 +21,7 @@ private:
     Coordinate* coordinates;
     int value;
     bool covered;
+    bool flagged;
 
     Board* board;
 
@@ -34,18 +38,31 @@ public:
     void setCovered(bool covered);
     bool getCovered();
 
+    bool isFlagged();
+
     static Field* getStyledField(Board* board);
     void updateTextBasedOnValue();
 
     void setBombIcon();
     void setDisabledStylesheet();
+    void setDisabledFlagStylesheet();
 
 private:
     QString getTextColorBasedOnValue();
     QString getBasicStylesheet();
+    void setFlaggedStyle();
+    void setDefaultStyle();
+
+public slots:
+    void onLeftClickSlot();
 
 private slots:
-    void onClickSlot();
+    void onRightClickSlot();
+    void mousePressEvent(QMouseEvent *e);
+
+signals:
+    void leftMouseButtonClicked();
+    void rightMouseButtonClicked();
 
 };
 
