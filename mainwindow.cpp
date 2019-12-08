@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     int windowSize = 32 * Board::NUM_OF_ROWS_AND_COL;
     setFixedSize(windowSize, windowSize);
+
+    setStyleSheet("background-color: #898989;");
 }
 
 MainWindow::~MainWindow()

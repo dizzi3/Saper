@@ -16,6 +16,8 @@ Field::Field(Board* board) : coordinates(nullptr){
     this->board = board;
     covered = true;
     flagged = false;
+
+    setStyleSheet("background-color: #7899D4; border: 1.2px solid #fff;");
 }
 
 void Field::setStatus(FieldStatus status){
@@ -95,15 +97,15 @@ void Field::setBombIcon(){
 }
 
 void Field::setDisabledStylesheet(){
-    QString stylesheet = "background-color: #576490; border: 1.2px solid #000;";
+    QString stylesheet = "background-color: #576490; border: 1.2px solid #fff;";
     setStyleSheet(stylesheet);
 }
 
 void Field::setDisabledFlagStylesheet(){
     if(status == FieldStatus::BOMB)
-        setStyleSheet("background-color: #50C5B7; border: 1.2px solid #000;");
+        setStyleSheet("background-color: #50C5B7; border: 1.2px solid #fff;");
     else
-        setStyleSheet("background-color: #EB5160; border: 1.2px solid #000;");
+        setStyleSheet("background-color: #EB5160; border: 1.2px solid #fff;");
 }
 
 QString Field::getTextColorBasedOnValue(){
@@ -138,7 +140,7 @@ QString Field::getTextColorBasedOnValue(){
 }
 
 QString Field::getBasicStylesheet(){
-    return "background-color: #c2eaff; border: 1.2px solid #000;";
+    return "background-color: #c2eaff; border: 1.2px solid #fff;";
 }
 
 void Field::setFlaggedStyle(){
@@ -165,9 +167,10 @@ void Field::onLeftClickSlot(){
         updateTextBasedOnValue();
         board->checkForWin();
     }else{
+        board->stopTimer();
         board->disableAllButtons();
         setBombIcon();
-        setStyleSheet(":disabled{background-color: #EB5160; border: 1.2px solid #000}");
+        setStyleSheet(":disabled{background-color: #EB5160; border: 1.2px solid #fff}");
         board->uncoverAllBombsExcept(this);
     }
 

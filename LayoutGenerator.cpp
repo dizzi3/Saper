@@ -4,6 +4,7 @@
 #include <random>
 #include <algorithm>
 #include <time.h>
+#include "GameTimer.h"
 
 LayoutGenerator::LayoutGenerator() {}
 
@@ -22,7 +23,7 @@ void LayoutGenerator::addFieldsToTheLayout(StyledGridLayout* layout){
     std::list<Field*> fields = instance->board->getFields();
 
     for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it)
-        layout->addWidget(*it, (*it)->getCoordinates()->getRow(), (*it)->getCoordinates()->getColumn());
+        layout->addWidget(*it, (*it)->getCoordinates()->getRow() + 2, (*it)->getCoordinates()->getColumn() + 2);
 }
 
 StyledGridLayout* LayoutGenerator::generate(QWidget* widget){
@@ -32,7 +33,10 @@ StyledGridLayout* LayoutGenerator::generate(QWidget* widget){
 
     StyledGridLayout* layout = StyledGridLayout::instance(widget);
 
-    instance->board = new Board();
+    GameTimer* gameTimer = new GameTimer();
+    layout->addWidget(gameTimer, 0, 0, Board::NUM_OF_ROWS_AND_COL, 0, Qt::AlignTop | Qt::AlignCenter);
+
+    instance->board = new Board(gameTimer);
     instance->board->generateBoard();
 
     instance->addFieldsToTheLayout(layout);

@@ -4,6 +4,7 @@
 #include <list>
 #include "Coordinate.h"
 #include "StyledGridLayout.h"
+#include "GameTimer.h"
 
 class Field;
 
@@ -11,21 +12,23 @@ class Board{
 
 public:
     static const int NUM_OF_ROWS_AND_COL = 30;
-    static const int BOMBS = 100;
+    static const int BOMBS = 75;
 
-    Board();
+    Board(GameTimer* t);
 
     std::list<Field*> getFields();
     void uncoverAllEmptyFieldsAround(Coordinate* coordinate);
     void uncoverAllBombsExcept(Field* field);
     void disableAllButtons();
     void checkForWin();
-    bool areAllFlagsCorrect();
-    bool areOnlyBombsLeftUncovered();
+    void stopTimer();
 
     void generateBoard();
 
 private:
+    bool areAllFlagsCorrect();
+    bool areOnlyBombsLeftUncovered();
+    void setCorrectStylesheetForFlaggedFields();
     void uncoverIfExists(int row, int column);
     void generateBombsCoordinates();
     Coordinate* generateRandomCoordinate(std::mt19937* eng);
@@ -41,6 +44,7 @@ private:
     std::list<Field*> fields;
     int numberOfAllFields;
     StyledGridLayout* gridLayout;
+    GameTimer* timer;
 };
 
 #endif // BOARD_H

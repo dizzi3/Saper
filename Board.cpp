@@ -3,8 +3,9 @@
 #include "Field.h"
 #include <QMessageBox>
 
-Board::Board(){
+Board::Board(GameTimer* t){
     numberOfAllFields = (int)qPow(NUM_OF_ROWS_AND_COL, 2);
+    this->timer = t;
 }
 
 std::list<Field*> Board::getFields(){
@@ -98,12 +99,19 @@ void Board::checkForWin(){
 
     if(areAllFlagsCorrect() || areOnlyBombsLeftUncovered()){
 
+        timer->stopTimer();
+        setCorrectStylesheetForFlaggedFields();
+
         QMessageBox msgBox;
         msgBox.setText("Gratulacje, wygrałeś!");
         msgBox.exec();
 
     }
 
+}
+
+void Board::stopTimer(){
+    timer->stopTimer();
 }
 
 bool Board::areAllFlagsCorrect(){
@@ -128,6 +136,17 @@ bool Board::areOnlyBombsLeftUncovered(){
     }
 
     return true;
+}
+
+void Board::setCorrectStylesheetForFlaggedFields(){
+
+    for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it){
+
+        if((*it)->isFlagged() && (*it)->getStatus() == FieldStatus::BOMB)
+            (*it)->setDisabledFlagStylesheet();
+
+    }
+
 }
 
 void Board::generateBoard(){

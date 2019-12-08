@@ -19,6 +19,7 @@ SOURCES += \
     Board.cpp \
     Coordinate.cpp \
     Field.cpp \
+    GameTimer.cpp \
     LayoutGenerator.cpp \
     StyledGridLayout.cpp \
     main.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     Coordinate.h \
     Field.h \
     FieldStatus.h \
+    GameTimer.h \
     LayoutGenerator.h \
     StyledGridLayout.h \
     mainwindow.h

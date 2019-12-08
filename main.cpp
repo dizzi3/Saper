@@ -5,7 +5,7 @@
 #include <QPushButton>
 #include "LayoutGenerator.h"
 #include <QFontDatabase>
-#include <QDebug>
+#include "GameTimer.h"
 
 int main(int argc, char *argv[])
 {
