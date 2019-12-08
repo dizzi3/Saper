@@ -8,6 +8,7 @@
 Board::Board(GameTimer* t){
     numberOfAllFields = (int)qPow(NUM_OF_ROWS_AND_COL, 2);
     this->timer = t;
+    win = false;
 }
 
 std::list<Field*> Board::getFields(){

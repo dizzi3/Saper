@@ -46,7 +46,7 @@ private:
     int numberOfAllFields;
     StyledGridLayout* gridLayout;
     GameTimer* timer;
-    bool win = false;
+    bool win;
 };
 
 #endif // BOARD_H
