@@ -16,26 +16,35 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Addhighscorewindow.cpp \
     Board.cpp \
     Coordinate.cpp \
     Field.cpp \
     GameTimer.cpp \
+    Highscore.cpp \
+    Highscorewindow.cpp \
     LayoutGenerator.cpp \
     StyledGridLayout.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    Addhighscorewindow.h \
     Board.h \
     Coordinate.h \
     Field.h \
     FieldStatus.h \
     GameTimer.h \
+    Highscore.h \
+    HighscoreRecord.h \
+    Highscorewindow.h \
     LayoutGenerator.h \
     StyledGridLayout.h \
     mainwindow.h
 
 FORMS += \
+    addhighscorewindow.ui \
+    highscorewindow.ui \
     mainwindow.ui
 
 # Default rules for deployment.

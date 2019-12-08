@@ -17,5 +17,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    void centerWindow();
+    bool eventFilter(QObject* obj, QEvent* event);
 };
 #endif // MAINWINDOW_H

@@ -86,6 +86,7 @@ void Field::updateTextBasedOnValue(){
     status = FieldStatus::NUMBER;
     setText(QString::number(value));
     setStyleSheet(getTextColorBasedOnValue());
+    covered = false;
 }
 
 void Field::setBombIcon(){

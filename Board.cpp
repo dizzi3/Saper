@@ -2,6 +2,8 @@
 #include <QtMath>
 #include "Field.h"
 #include <QMessageBox>
+#include "Highscore.h"
+#include "Addhighscorewindow.h"
 
 Board::Board(GameTimer* t){
     numberOfAllFields = (int)qPow(NUM_OF_ROWS_AND_COL, 2);
@@ -97,8 +99,12 @@ void Board::disableAllButtons(){
 
 void Board::checkForWin(){
 
+    if(win)
+        return;
+
     if(areAllFlagsCorrect() || areOnlyBombsLeftUncovered()){
 
+        win = true;
         timer->stopTimer();
         setCorrectStylesheetForFlaggedFields();
 
@@ -106,6 +112,12 @@ void Board::checkForWin(){
         msgBox.setText("Gratulacje, wygrałeś!");
         msgBox.exec();
 
+        int score = calculateScore();
+        Highscore* h = new Highscore();
+        if(h->isAHighscore(score)){
+            AddHighscoreWindow* addWindow = new AddHighscoreWindow(score);
+            addWindow->show();
+        }
     }
 
 }
@@ -118,7 +130,8 @@ bool Board::areAllFlagsCorrect(){
 
     for(std::list<Field*>::iterator it = fields.begin(); it != fields.end(); ++it){
 
-        if((*it)->getStatus() == FieldStatus::BOMB && (*it)->isFlagged() == false)
+        if(((*it)->isFlagged() && (*it)->getStatus() != FieldStatus::BOMB)
+                || ((*it)->getStatus() == FieldStatus::BOMB && (*it)->isFlagged() == false))
             return false;
 
     }
@@ -260,4 +273,10 @@ Field* Board::getFieldIfExists(Coordinate c){
     }
 
     return nullptr;
+}
+
+int Board::calculateScore(){
+    int timeFactor = timer->getTimeInSeconds();
+    double score = ((double)NUM_OF_ROWS_AND_COL / (double)timeFactor) * 1000.0;
+    return (int)score;
 }
